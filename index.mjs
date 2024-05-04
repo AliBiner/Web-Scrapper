@@ -1,21 +1,21 @@
-// const axios = require("axios");
 import axios from "axios";
 import cheerio from "cheerio";
-import { exec } from "child_process";
-import fs from "fs";
-import request from "request";
+import { helloSelenium } from "./selenium.mjs";
 
 async function name() {
-  let array = [];
+  let arr = [];
+  let i = 1;
   for (let index = 6; index > 0; index--) {
+    console.log(`${i}. url processing...`);
+
     const result = await axios.get(
       `https://www.bcekmece.bel.tr/devamedendetay?id=${index}`
     );
 
     const $ = cheerio.load(result.data);
-    array.push($("h2.font-weight-normal").text());
+    arr.push($("h2.font-weight-normal").text());
 
-    array.push(
+    arr.push(
       $("#b1e94155-d6ce-49c9-9ac8-3c140e8d63b7").find("p > span").text()
     );
 
@@ -25,32 +25,11 @@ async function name() {
     if (photo) {
       request(photo).pipe(fs.createWriteStream(`./images/${index}.jpg`));
     }
+    console.log(`${i}. url finish.`);
+    i++;
   }
-  fs.writeFile("./test.txt", array.join("\n\n\n"), (err) => {
-    if (err) throw err;
-  });
-  console.log(array);
-  python(array);
-}
-function python(params) {
-  const pythonProcess = exec(
-    "python3 cpTranslete.py",
-    (err, stdout, stderr) => {
-      if (err) {
-        console.error(`Hata oluştu: ${err.message}`);
-        return;
-      }
-      if (stderr) {
-        console.error(`Hata çıktısı: ${stderr}`);
-        return;
-      }
-      const processedResult = JSON.parse(stdout);
-      console.log("İşlenmiş sonuç:", processedResult);
-    }
-  );
-  const jsonArray = JSON.stringify(params);
-  pythonProcess.stdin.write(jsonArray);
-  pythonProcess.stdin.end();
+  console.log(`Informations sending to translete...`);
+  helloSelenium(arr);
 }
 
 name();

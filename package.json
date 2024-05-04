@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "start": "node index.mjs",
+    "start": "node index.mts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -16,6 +17,7 @@
     "puppeteer": "^22.7.1",
     "puppeteer-core": "^22.7.1",
     "request": "^2.88.2",
-    "selenium-webdriver": "^4.20.0"
+    "selenium-webdriver": "^4.20.0",
+    "ts-node": "^10.9.2"
   }
 }
